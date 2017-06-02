@@ -4,5 +4,8 @@
 
 module.exports = {
   // enable logging for development
-  logging: true
+  logging: true,
+  db: {
+    url: 'mongodb://localhost/turtlesense'
+  }
 }
