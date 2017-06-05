@@ -12,20 +12,18 @@ var userSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
-  // firstname: {
-  //   type: String,
-  //   unique: false,
-  //   required: true
-  // },
-  // lastname: {
-  //   type: String,
-  //   unique: false,
-  //   required: true
-  // },
+  },
 
-  // // mobile number - not required
-  // mobile: String,
+  email: {
+    type: String,
+    unique: true,
+    required: true
+  },
+
+  devices: [{
+    type: Schema.Types.ObjectId,
+    ref: 'device'
+  }]
 });
 
 // middleware that will run before a document
@@ -55,13 +53,3 @@ userSchema.methods = {
 };
 
 module.exports = mongoose.model('user', userSchema);
-
-
-module.exports = mongoose.model('user', userSchema);
-
-  // List of ids corresponding each device
-  // a user is associated with
-  // devices: [{
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'device'
-  // }]
