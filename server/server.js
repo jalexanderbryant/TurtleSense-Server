@@ -2,25 +2,30 @@
   * DESC: 
 */
 // Get the express module
-var express   = require('express');
+const express   = require('express');
 
 // instantiate the app
-var app       = express();
+const app       = express();
 
 // Get the api module (api/index.js)
-var api       = require('./api/api')
+const api       = require('./api/api')
 
 // Get the application configurations
-var config = require('./config/config');
+const config = require('./config/config');
 
 // load logger
-var logger = require('./util/logger');
+const logger = require('./util/logger');
 
 // Load auth routes
-var auth = require('./auth/routes');
+const auth = require('./auth/routes');
+
+// Path
+const path = require('path');
+
 
 // Setup database
 require('mongoose').connect(config.db.url);
+
 
 if(config.seed){
   require('./util/seed');
@@ -36,6 +41,7 @@ require('./middleware/appMiddleware')(app);
 // setup the api
 app.use('/api/', api);
 app.use('/auth', auth);
+console.log('debug123: ' + __dirname);
 console.log('inside server/server.js');
 
 app.use(function(err, req, res, next) {

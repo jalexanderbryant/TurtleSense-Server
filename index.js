@@ -1,14 +1,19 @@
 /*
   * DESC: Server entry point for TurtleSense
 */
-// Require config module (config/config.js)
-var config  = require('./server/config/config');
+const path = require('path');
+const express = require('express');
+const logger  = require('./server/util/logger');
+const config  = require('./server/config/config');
+const app     = require('./server/server');
 
-// Require app module (server/index.js)
-var app     = require('./server/server');
+// Direct to static files
+app.use(express.static(path.join(__dirname, 'client/')));
 
-// Require logger module (server/util/logger.js)
-var logger  = require('./server/util/logger');
+// Load index
+app.get('*', function(request, result){
+  result.sendFile(path.resolve('client/index.html'));
+});
 
 // Listen
 app.listen( config.port );
