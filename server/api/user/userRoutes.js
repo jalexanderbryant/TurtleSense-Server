@@ -6,7 +6,6 @@ console.log('inside server/api/user/userRoutes.js');
 
 // Create generic routes for user
 require('../../util/createGenericRoutes')(userController, router);
-
 // Setup a test route
 // The root of users can be found at localhost:3000/api/users
 // router.route('/testA')

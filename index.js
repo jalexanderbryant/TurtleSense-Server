@@ -16,5 +16,5 @@ app.get('*', function(request, result){
 });
 
 // Listen
-app.listen( config.port );
+app.listen( config.server.port );
 logger.log('Server listening on http://localhost:' + config.port);

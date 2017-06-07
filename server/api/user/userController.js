@@ -1,5 +1,7 @@
-var User = require('./userModel');
-var _ = require('lodash');
+const Mailer = require('../../mailers/mailers');
+const Auth = require('../../auth/auth');
+const User = require('./userModel');
+const _ = require('lodash');
 
 console.log('inside api/user/userController');
 
@@ -57,10 +59,15 @@ exports.post = function(request, result, next)
     console.log('inside userController.POST');
     var newUser = request.body;
 
-    console.log('userController.POST - ' + newUser.toString());
+
     User.create(newUser)
         .then(function(user){
-            result.json(user);
+            var tokenData = {
+                username: user.username,
+                id: user._id
+            };
+            Mailer.sendRegistrationEmail(user, Auth.signToken(user._id))
+            // result.json(user);
         }, function(err){
             next(err);
         });

@@ -1,6 +1,7 @@
 {
   "watch": [
-    "client/"
+    "client/",
+    "server/"
   ],
   "ext": "js json css html"
 }
