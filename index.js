@@ -10,9 +10,9 @@ const app     = require('./server/server');
 // Direct to static files
 app.use(express.static(path.join(__dirname, 'client/')));
 
-// Load index
-app.get('*', function(request, result){
-  result.sendFile(path.resolve('client/index.html'));
+// Tests....s
+app.get('/signup', function(request, result){
+  result.sendFile(path.resolve('client/signup.html'));
 });
 
 // Listen

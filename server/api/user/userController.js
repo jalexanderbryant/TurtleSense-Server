@@ -1,4 +1,5 @@
 var User = require('./userModel');
+var Auth = require('../../auth/auth')
 var _ = require('lodash');
 
 console.log('inside api/user/userController');
@@ -6,6 +7,8 @@ console.log('inside api/user/userController');
 // Find single user by id???
 exports.params = function( request, result, next, id ){
     User.findById(id)
+        .select('-password')
+        .exec()
         .then(function(user){
             if(!user){
                 next(new Error("No user with that id"));
@@ -13,7 +16,10 @@ exports.params = function( request, result, next, id ){
                 request.user = user;
                 next();
             }
-        }, function(err){ next(err);});
+        }, 
+        function(err){
+            next(err);
+        });
 };
 
 
@@ -21,10 +27,14 @@ exports.params = function( request, result, next, id ){
 exports.get = function(request, result, next)
 {
     console.log('inside userController.GET');
-    User.find()
+    User.find({})
+        .select('-password')
         .then(function(users){
-            result.json(users);
-        }, function(err){
+            result.json(users.map(function(user){
+                return user.toJson();
+            }));
+        }, 
+        function(err){
             next(err);
         });
 };
@@ -32,7 +42,7 @@ exports.get = function(request, result, next)
 exports.getOne = function(request, result, next)
 {
     var user = request.user;
-    result.json(user);
+    result.json(user.toJson());
 };
 
 // Update a user
@@ -46,7 +56,7 @@ exports.put = function(request, result, next)
         if(err){
             next(err);
         } else {
-            result.json(saved);
+            result.json(saved.toJson());
         }
     })
 };
@@ -55,15 +65,23 @@ exports.put = function(request, result, next)
 exports.post = function(request, result, next)
 {
     console.log('inside userController.POST');
-    var newUser = request.body;
+    var newUser = new User(request.body);
 
-    console.log('userController.POST - ' + newUser.toString());
-    User.create(newUser)
-        .then(function(user){
-            result.json(user);
-        }, function(err){
-            next(err);
-        });
+    newUser.save(function(err, user){
+        if(err){ 
+            return next(err);
+        }
+        var token = Auth.signToken(user._id);
+        result.json({token: token})
+    });
+
+    // console.log('userController.POST - ' + newUser.toString());
+    // User.create(newUser)
+    //     .then(function(user){
+    //         result.json(user);
+    //     }, function(err){
+    //         next(err);
+    //     });
 };
 
 // Delete a user
@@ -73,7 +91,11 @@ exports.delete = function(request, result, next)
         if(err){
             next(err);
         } else {
-            result.json(removed);
+            result.json(removed.toJson());
         }
     });
 };
+
+exports.me = function( request, result){
+    result.json(request.user.toJson());
+}
