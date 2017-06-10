@@ -14,7 +14,8 @@ app.use(express.static(path.join(__dirname, 'client/')));
 app.get('/signup', function(request, result){
   result.sendFile(path.resolve('client/signup.html'));
 });
-
+console.log("debug123 " + config.server.host);
+console.log("debug123 " + config.server.port);
 // Listen
-app.listen( config.port );
-logger.log('Server listening on http://localhost:' + config.port);
+app.listen( config.server.port );
+logger.log('Server listening on http://' + config.server.host + ':' + config.server.port);

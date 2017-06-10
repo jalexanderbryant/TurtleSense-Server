@@ -1,6 +1,10 @@
 var User = require('./userModel');
-var Auth = require('../../auth/auth')
+var config = require('../../config/config');
+var Auth = require('../../auth/auth');
+var jwt = require('jsonwebtoken');
+var Mailer = require('../../mailers/mailers');
 var _ = require('lodash');
+const logger = require('../../util/logger');
 
 console.log('inside api/user/userController');
 
@@ -71,8 +75,24 @@ exports.post = function(request, result, next)
         if(err){ 
             return next(err);
         }
-        var token = Auth.signToken(user._id);
-        result.json({token: token})
+        var tokenData = {
+            username: user.username,
+            id: user._id
+        }
+
+        // var token = Auth.signToken(user._id);
+        var token = Auth.signToken(tokenData);
+        
+        Mailer.sendRegistrationEmail(user, token, function(error, res){
+            if(error){ return next(err); }
+
+            console.log('debug234 ' + result)
+            result.json({
+                message: "Registration Email Sent",
+                result: res
+            });
+        })
+        // result.json({token: token});
     });
 
     // console.log('userController.POST - ' + newUser.toString());
@@ -99,3 +119,49 @@ exports.delete = function(request, result, next)
 exports.me = function( request, result){
     result.json(request.user.toJson());
 }
+
+
+exports.completeRegistration = function(request, result){
+    console.log('debug345 ' + config.secrets);
+    console.log('debug345 ' + config.secrets.jwt);
+    jwt.verify(request.params.authToken, config.secrets.jwt, function(error, decodedToken){
+
+        console.log('debug456 token='+decodedToken )
+        console.log('debug567 token_id='+decodedToken.id )
+        console.log('debug567 token_from_body='+request.body.token )
+        if(error){
+
+            logger.error(error.stack);
+            return result.status(500).send('Something went wrong with verifying you.');
+
+        } else {
+            
+            User.findUserByIdAndUserName(decodedToken.id, decodedToken.username, function(error, user){
+                if(error){
+                    logger.error(error.stack);
+                    return result.status(500).send('Something went wrong with locating you in the database.');
+
+                } else if( user == null ) {
+                    return result.status(422).send('Something went wrong. Your email is not reconized.');
+
+                } else if( user.isVerified === true ){
+                    return result.json({message: 'account is already verified'});
+
+                } else {
+                    user.isVerified = true;
+                    user.save(function(err, saved){
+                        if(err){
+                            next(err);
+                        } else {
+                            result.json({
+                                message: 'Registration Successful',
+                                username: saved.username
+                            });
+                        }
+                    })
+
+                }
+            })
+        }
+    })
+};

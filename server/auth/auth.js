@@ -95,9 +95,12 @@ exports.verifyUser = function() {
 };
 
 // util method to sign tokens on signup
-exports.signToken = function(id) {
+exports.signToken = function(tokenData) {
   return jwt.sign(
-    {_id: id},
+    {
+      username: tokenData.username,
+      _id: tokenData.id
+    },
     config.secrets.jwt,
     {expiresIn: config.expireTime}
   );

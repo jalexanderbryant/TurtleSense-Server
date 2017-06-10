@@ -21,6 +21,8 @@ router.route('/:id')
   .put(checkUserAuthentication, userController.put)
   .delete(checkUserAuthentication, userController.delete);
 
+router.get('/verifyEmail/:authToken', userController.completeRegistration);
+
 // Setup a test route
 // The root of users can be found at localhost:3000/api/users
 // router.route('/testA')

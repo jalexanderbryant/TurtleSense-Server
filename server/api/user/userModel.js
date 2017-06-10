@@ -23,7 +23,8 @@ var userSchema = new Schema({
   devices: [{
     type: Schema.Types.ObjectId,
     ref: 'device'
-  }]
+  }],
+  isVerified: false
 });
 
 // middleware that will run before a document
@@ -58,5 +59,11 @@ userSchema.methods = {
     return obj;
   }
 };
+
+userSchema.statics = {
+  findUserByIdAndUserName: function(id, username, callback) {
+        this.findOne({ username: username, _id: id }, callback);
+  }
+}
 
 module.exports = mongoose.model('user', userSchema);
