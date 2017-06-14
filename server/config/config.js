@@ -16,9 +16,9 @@ var config = {
     jwt: process.env.JWT || 'gumball'
   },
   email:{
-    user: 'j.alexanderbryant@gmail.com',
     // Change before production
-    password: 'idcnbaplzyexgwfd',
+    user: process.env.TS_EMAIL_USER,
+    password: process.env.TS_EMAIL_PASSWORD,
     registerUserUrl: 'api/users/verifyEmail'
   },
   server: {
