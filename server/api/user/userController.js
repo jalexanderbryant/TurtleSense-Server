@@ -126,15 +126,21 @@ exports.completeRegistration = function(request, result){
     console.log('debug345 ' + config.secrets.jwt);
     jwt.verify(request.params.authToken, config.secrets.jwt, function(error, decodedToken){
 
+
+
         console.log('debug456 token='+ JSON.stringify(decodedToken, null, 4) );
-        console.log('debug567 token_id='+decodedToken._id )
         console.log('debug567 token_from_body='+request.body.token )
+        
         if(error){
 
             logger.error(error.stack);
             return result.status(500).send('Something went wrong with verifying you.');
 
+        } else if(!decodedToken) {
+            logger.error("Invalid token");
+            return result.status(500).send('Invalid token.');
         } else {
+            console.log('debug567 token_id='+decodedToken._id )
             
             User.findUserByIdAndUserName(decodedToken._id, decodedToken.username, function(error, user){
                 if(error){
