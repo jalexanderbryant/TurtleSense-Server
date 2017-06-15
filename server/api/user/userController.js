@@ -122,7 +122,7 @@ exports.me = function( request, result){
 
 
 exports.completeRegistration = function(request, result){
-    console.log('debug345 ' + config.secrets);
+    console.log('debug345 ' + JSON.stringify(config.secrets, null, 4));
     console.log('debug345 ' + config.secrets.jwt);
     jwt.verify(request.params.authToken, config.secrets.jwt, function(error, decodedToken){
 
