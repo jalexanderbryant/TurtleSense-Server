@@ -34,7 +34,8 @@ exports.sendRegistrationEmail = function(user, token, callback)
 };
 */
 exports.sendRegistrationEmail = function(user, token, callback){
-  var registrationLink = "http://" + config.server.host + ":" + config.server.port + "/" + config.email.registerUserUrl + "/" + token;
+  // var registrationLink = "http://" + config.server.host + ":" + config.server.port + "/" + config.email.registerUserUrl + "/" + token;
+  var registrationLink = "http://" + config.server.host + "/" + config.email.registerUserUrl + "/" + token;
   var from = `TurtleSense<${config.email.user}>`;
   var body = `<p>Thank you for registering with the TurtleSense software. Verify your account by clicking the link below.<br /><a href=${registrationLink.toString()}
     >Verification Link</a></p>`;
