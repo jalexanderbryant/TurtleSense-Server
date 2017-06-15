@@ -129,7 +129,8 @@ exports.completeRegistration = function(request, result){
 
 
         console.log('debug456 token='+ JSON.stringify(decodedToken, null, 4) );
-        console.log('debug567 token_from_body='+request.body.token )
+        console.log('debug567 token_from_body='+request.body.token );
+        console.log('debug789 body='+ JSON.stringify(request.body, null, 4));
         
         if(error){
 
