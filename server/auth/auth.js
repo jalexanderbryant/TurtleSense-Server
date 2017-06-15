@@ -101,7 +101,7 @@ exports.signToken = function(tokenData) {
       username: tokenData.username,
       _id: tokenData.id
     },
-    config.secrets.jwt,
+    config.secrets.JWT,
     {expiresIn: config.expireTime}
   );
 };
