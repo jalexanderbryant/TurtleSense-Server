@@ -127,7 +127,7 @@ exports.completeRegistration = function(request, result){
     jwt.verify(request.params.authToken, config.secrets.jwt, function(error, decodedToken){
 
         console.log('debug456 token='+ JSON.stringify(decodedToken, null, 4) );
-        console.log('debug567 token_id='+decodedToken.id )
+        console.log('debug567 token_id='+decodedToken._id )
         console.log('debug567 token_from_body='+request.body.token )
         if(error){
 
@@ -143,7 +143,7 @@ exports.completeRegistration = function(request, result){
 
                 } else if( user == null ) {
 
-                    console.log('debug_decoded_token: ' + decodedToken.id);
+                    console.log('debug_decoded_token: ' + decodedToken._id);
                     console.log('debug_decoded_token_username: ' + decodedToken.username);
 
                     return result.status(422).send('Something went wrong. Your email is not reconized.');
