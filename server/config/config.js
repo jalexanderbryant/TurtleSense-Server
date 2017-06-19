@@ -22,7 +22,7 @@ var config = {
     registerUserUrl: 'api/users/verifyEmail'
   },
   server: {
-    host: 'localhost',
+    host: process.env.TS_URL || 'localhost',
     port: process.env.PORT || 3000,
   }
 };
