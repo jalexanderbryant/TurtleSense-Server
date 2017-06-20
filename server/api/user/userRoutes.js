@@ -13,7 +13,7 @@ router.param('id', userController.params);
 router.get('/me', checkUserAuthentication, userController.me);
 
 router.route('/')
-  .get(userController.get)
+  .get(checkUserAuthentication, userController.get)
   .post(userController.post);
 
 router.route('/:id')

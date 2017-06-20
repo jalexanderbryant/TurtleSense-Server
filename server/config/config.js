@@ -10,8 +10,8 @@ var config = {
   dev: 'development',
   test: 'testing',
   prod: 'production',
-  // 10 days in minutes
-  expireTime: 24 * 60 * 60 * 10,
+  // 90 days in minutes
+  expireTime: 24 * 60 * 60 * 90,
   secrets:{
     jwt: process.env.JWT || 'gumball'
   },

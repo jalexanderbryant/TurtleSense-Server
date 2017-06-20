@@ -1,11 +1,14 @@
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var config = require('../config/config');
-var checkToken = expressJwt({ secret: config.secrets.jwt });
+var checkToken = expressJwt({ secret: 'gumball' });
 var User = require('../api/user/userModel');
 
 exports.decodeToken = function() {
   return function(request, result, next) {
+    
+    console.log('decodeToken' + JSON.stringify(request.body, null, 4))
+
     // make it optional to place token on query string
     // if it is, place it on the headers where it should be
     // so checkToken can see it. See follow the 'Bearer 034930493' format
@@ -13,7 +16,7 @@ exports.decodeToken = function() {
     if (request.query && request.query.hasOwnProperty('access_token')) {
       request.headers.authorization = 'Bearer ' + request.query.access_token;
     }
-
+    // console.log('debug_auth1' + JSON.stringify(request, null, 4))
     // this will call next if token is valid
     // and send error if its not. It will attached
     // the decoded token to req.user
@@ -34,14 +37,19 @@ exports.getFreshUser = function() {
     // since the client got the JWT, or
     // it was a JWT from some other source
 
+    console.log('getFreshUser req.body ' + JSON.stringify(request.body, null,4 ))
+
     // update req.user with fresh user from the
     // stale token data
     User.findById(request.user._id)
       .then(function(user){
         if(!user){
+          console.log('getFreshUser unauthorized')
           result.status(401).send('Unauthorized');
         } else {
           request.user = user;
+          console.log('getFreshUser found user ' + JSON.stringify(user, null,4 ))
+
           next();
         }
       }, function(err){
@@ -95,11 +103,15 @@ exports.verifyUser = function() {
 };
 
 // util method to sign tokens on signup
-exports.signToken = function(tokenData) {
+exports.signToken = function(id) {
+  
+  console.log('signToken: ' + id)
+  console.log('signToken secret: ' + config.secrets.jwt )
+  console.log('signToken expireTime: ' + config.expireTime )
   return jwt.sign(
     {
-      username: tokenData.username,
-      _id: tokenData.id
+      // username: tokenData.username,
+      _id: id
     },
     config.secrets.jwt,
     {expiresIn: config.expireTime}
