@@ -13,10 +13,13 @@ exports.decodeToken = function() {
     // if it is, place it on the headers where it should be
     // so checkToken can see it. See follow the 'Bearer 034930493' format
     // so checkToken can see it and decode it
+    console.log('debug_auth1' + JSON.stringify(request.headers, null, 4))
+
     if (request.query && request.query.hasOwnProperty('access_token')) {
+      console.log('debug_auth2 - checking query ' + request.query.access_token);
       request.headers.authorization = 'Bearer ' + request.query.access_token;
     }
-    console.log('debug_auth1' + JSON.stringify(request.headers, null, 4))
+    console.log('debug_auth3' + JSON.stringify(request.headers, null, 4))
     // this will call next if token is valid
     // and send error if its not. It will attached
     // the decoded token to req.user
