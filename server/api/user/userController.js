@@ -79,7 +79,7 @@ exports.post = function(request, result, next)
             username: user.username,
             id: user._id
         }
-
+        console.log('create_user + ' + JSON.stringify(tokenData, null, 4))
         // var token = Auth.signToken(user._id);
         var token = Auth.signToken(tokenData);
         

@@ -37,7 +37,7 @@ exports.getFreshUser = function() {
     // since the client got the JWT, or
     // it was a JWT from some other source
 
-    console.log('getFreshUser req.body ' + JSON.stringify(request.body, null,4 ))
+    console.log('getFreshUser req.body ' + JSON.stringify(request.user, null,4 ))
 
     // update req.user with fresh user from the
     // stale token data
@@ -103,15 +103,15 @@ exports.verifyUser = function() {
 };
 
 // util method to sign tokens on signup
-exports.signToken = function(id) {
+exports.signToken = function(tokenData) {
   
-  console.log('signToken: ' + id)
+  console.log('signToken: ' + tokenData.id)
   console.log('signToken secret: ' + config.secrets.jwt )
   console.log('signToken expireTime: ' + config.expireTime )
   return jwt.sign(
     {
-      // username: tokenData.username,
-      _id: id
+      username: tokenData.username,
+      _id: tokenData.id
     },
     config.secrets.jwt,
     {expiresIn: config.expireTime}
