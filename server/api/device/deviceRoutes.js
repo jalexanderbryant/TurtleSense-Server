@@ -14,6 +14,9 @@ router.route('/:id')
   .get(controller.getOne)
   .put(controller.put)
   .delete(controller.delete);
+
+router.route('/init')
+  .post(controller.init);
 // Setup a test route
 // The root of users can be found at localhost:3000/api/users
 // router.route('/')
