@@ -69,43 +69,25 @@ exports.create_device = function(request, result, next)
 {
   var device_name = request.body.device_name
   var serial_number = request.body.serial_number
-
+  var serial_number_error = "This device is already associated assocated with the database. Check the messaging service. Or Delete the device online"
+  var device_name_error = "This device is already associated assocated with the database. Select a unique username"
   if(!device_name || !serial_number)
   {
     // Return an error to the device informing there was an error.
     // On edison, device serial number can be found in /factory/serial_number
     var error_payload = {
       status: "error",
-      message: "Device name and serial number required. Verify that the device name you supplied is unique, and that the device serial number can be found (/factory/serial_number)."
+      message: "Device name and serial number required. Verify that the device name you supplied is unique, and that the device serial number can be found in /factory/serial_number."
     };
     result.json(error_payload);
   }
 
-  // Check database for 
-  Device.find({deviceID: device_name})
-    .then(function(device){
-      if(user){
-        var error_payload = {
-          status: "error",
-          message: "This device is already associated assocated with the database. Check the messaging service."
-        };
+  // Check database
+  if( check_db(serial_number, "serial_number") )
+    result.json({status: "error", message: serial_number_error});
 
-        result.json(error_payload);
-      }
-    });
-
-  Device.find({deviceName: serial_number})
-    .then(function(device){
-      if(user){
-        var error_payload = {
-          status: "error",
-          message: "This device is already associated assocated with the database. Check the messaging service."
-        };
-
-        result.json(error_payload);
-      }
-    });
-
+  if(check_db(device_name, "device_name"))
+    result.json({status: "error", message: device_name_error})
 
   result.json({ message: "Hello,world"});
 }
@@ -115,25 +97,19 @@ exports.create_device = function(request, result, next)
 function check_db(parameter, parameter_type)
 {
   var query = null;
-  message = null;
   
   if (parameter_type == "serial_number"){
     query = {deviceID: parameter};
-    message = "This device is already associated assocated with the database. Check the messaging service."
-  } else {
+  } else if(parameter_type == "device_name"){
     query = {deviceName: parameter};
-    message = "This device is already associated assocated with the database. Select a unique username."
   }
 
   Device.find(query)
     .then(function(device){
       if(user){
-        var error_payload = {
-          status: "error",
-          message: "This device is already associated assocated with the database. Check the messaging service."
-        };
-
-        result.json(error_payload);
+        return true;
+      } else {
+        return false;
       }
     });
 }
