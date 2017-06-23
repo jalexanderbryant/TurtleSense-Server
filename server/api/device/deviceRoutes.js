@@ -8,15 +8,15 @@ console.log('inside server/api/device/deviceRoutes.js');
 
 router.route('/')
   .get(controller.get)
-  .get(controller.post);
+  .post(controller.post);
 
 router.route('/:id')
   .get(controller.getOne)
   .put(controller.put)
   .delete(controller.delete);
 
-router.route('/init')
-  .post(controller.init);
+router.route('/create_device')
+  .post(controller.check_devices, controller.create_device);
 // Setup a test route
 // The root of users can be found at localhost:3000/api/users
 // router.route('/')

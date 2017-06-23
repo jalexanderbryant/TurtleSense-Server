@@ -34,12 +34,12 @@ var users = [
 ];
 
 var devices = [
-  {deviceID: 'a894b1f4-9f87-48e1-ae2e-8992ea0e7baa'},
-  {deviceID: '6df1d7bb-f904-47ad-9313-37056cb3fb4a'},
-  {deviceID: '6be646b6-2f80-4e89-b1c7-73936c6e5ed2'},
-  {deviceID: '891c2557-84c7-4731-876b-dc8283081a7c'},
-  {deviceID: 'ecc4018c-49ca-11e7-a919-92ebcb67fe33'},
-  {deviceID: 'f8abc21e-49ca-11e7-a919-92ebcb67fe33'},
+  {serialNumber: 'a894b1f4-9f87-48e1-ae2e-8992ea0e7baa', deviceName: "alpha_hub"},
+  {serialNumber: '6df1d7bb-f904-47ad-9313-37056cb3fb4a', deviceName: "beta_hub"},
+  {serialNumber: '6be646b6-2f80-4e89-b1c7-73936c6e5ed2', deviceName: "charlie_hub"},
+  {serialNumber: '891c2557-84c7-4731-876b-dc8283081a7c', deviceName: "delta_hub"},
+  {serialNumber: 'ecc4018c-49ca-11e7-a919-92ebcb67fe33', deviceName: "epsilon_hub"},
+  {serialNumber: 'f8abc21e-49ca-11e7-a919-92ebcb632d53', deviceName: "foxtrot_hub"},
 ];
 
 var createDoc = function(model, doc) {

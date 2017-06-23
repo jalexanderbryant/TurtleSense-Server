@@ -7,11 +7,19 @@ var DeviceSchema = new Schema({
     unique: true,
     required: true
   },
-  deviceID: {
+
+  serialNumber: {
     type: String,
     unique: true,
     required: true
   },
 });
+
+DeviceSchema.methods = {
+  toJson: function() {
+    var obj = this.toObject()
+    return obj;
+  }
+};
 
 module.exports = mongoose.model('device', DeviceSchema);

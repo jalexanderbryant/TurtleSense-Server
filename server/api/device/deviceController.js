@@ -1,4 +1,6 @@
-var Device = require('./deviceModel');
+const Device = require('./deviceModel');
+const logger = require('../../util/logger');
+const CircularJSON = require('circular-json');
 
 exports.params = function( request, result, next, id ){
   Device.findById(id)
@@ -65,51 +67,67 @@ exports.delete = function(request, result, next) {
   });
 };
 
-exports.create_device = function(request, result, next)
-{
+exports.check_devices = function(request, result, next){
   var device_name = request.body.device_name
   var serial_number = request.body.serial_number
-  var serial_number_error = "This device is already associated assocated with the database. Check the messaging service. Or Delete the device online"
-  var device_name_error = "This device is already associated assocated with the database. Select a unique username"
-  if(!device_name || !serial_number)
-  {
+  var serial_number_error = "This device is already assocated with the database. Check the messaging service. Or Delete the device online"
+  var device_name_error = "This device is already assocated with the database. Select a unique device name."
+  
+
+  logger.log('Attempting to create device with deviceName='+device_name +' and serial='+serial_number);
+  
+  
+  if(!device_name || !serial_number){
+    logger.log('Failed to create device. Serial number or device name incorrect.')
+    
     // Return an error to the device informing there was an error.
     // On edison, device serial number can be found in /factory/serial_number
     var error_payload = {
       status: "error",
       message: "Device name and serial number required. Verify that the device name you supplied is unique, and that the device serial number can be found in /factory/serial_number."
     };
-    result.json(error_payload);
+    result.send(JSON.stringify(error_payload));
   }
 
-  // Check database
-  if( check_db(serial_number, "serial_number") )
-    result.json({status: "error", message: serial_number_error});
+  // Check database to see if device of same name exists...
+  // var existing_device = Device.findOne({deviceName: device_name});
+  // logger.log('debug existing_device = ' + CircularJSON.stringify(existing_device));
 
-  if(check_db(device_name, "device_name"))
-    result.json({status: "error", message: device_name_error})
+  Device.findOne({deviceName: device_name})
+    .then( function(device){
+      if(error){ 
+        logger.error(error.stack);
+        return result.status(500).send('Something went wrong.');
+      }
 
-  result.json({ message: "Hello,world"});
+      if(device){
+        logger.log('Device already exists with device name provided.');
+        return result.status(401).send({status: "error", message: device_name_error});
+      }
+    }, function(err){next(err)})
+    
+    .then(function(device){
+      
+    }, function(err){next(err)});
+
+  // Device.findOne({serialNumber: serial_number}, function(error, device){
+  //   if(error){ 
+  //     logger.error(error.stack);
+  //     return result.status(500).send('Something went wrong.');
+  //   }
+
+  //   if(device){
+  //     logger.log('Device already exists with serial number provided.');
+  //     return result.status(401).send({status: "error", message: device_name_error});
+  //   }
+  // });
+
+  console.log('end?')
+  // next(result.send("abc"));
+
 }
 
-// Returns true of false depending on whether a user is found
-// or not.
-function check_db(parameter, parameter_type)
-{
-  var query = null;
-  
-  if (parameter_type == "serial_number"){
-    query = {deviceID: parameter};
-  } else if(parameter_type == "device_name"){
-    query = {deviceName: parameter};
-  }
 
-  Device.find(query)
-    .then(function(device){
-      if(user){
-        return true;
-      } else {
-        return false;
-      }
-    });
+exports.create_device = function(error, request, response){
+  response.send("Device Created");
 }
