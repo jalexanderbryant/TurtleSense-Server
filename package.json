@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jalexanderbryant/TurtleSense-Server#readme",
   "dependencies": {
+    "aws-sdk": "^2.77.0",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.13.2",
     "colors": "^1.1.2",
