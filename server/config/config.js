@@ -24,7 +24,8 @@ var config = {
   server: {
     host: process.env.TS_URL || 'localhost',
     port: process.env.PORT || 3000,
-  }
+  },
+  aws_region: 'us-west-2'
 };
 
 // Set NODE_ENV environment variable

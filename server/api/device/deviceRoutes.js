@@ -15,8 +15,7 @@ router.route('/:id')
   .put(controller.put)
   .delete(controller.delete);
 
-router.route('/create_device')
-  .post(controller.check_devices, controller.create_device);
+router.post('/create_device', controller.create_device);
 // Setup a test route
 // The root of users can be found at localhost:3000/api/users
 // router.route('/')

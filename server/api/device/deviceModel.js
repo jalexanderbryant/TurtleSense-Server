@@ -13,6 +13,10 @@ var DeviceSchema = new Schema({
     unique: true,
     required: true
   },
+
+  deviceARN: {
+    type: String
+  }
 });
 
 DeviceSchema.methods = {
