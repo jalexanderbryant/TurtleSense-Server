@@ -1,7 +1,8 @@
 const Device = require('./deviceModel');
 const logger = require('../../util/logger');
 const CircularJSON = require('circular-json');
-const AWS = require('aws-sdk');
+const config = require('../../config/config');
+// const AWS = require('aws-sdk');
 
 exports.params = function( request, result, next, id ){
   Device.findById(id)
@@ -118,7 +119,7 @@ exports.create_device = function(request, result, next){
       } else {
 
         // Create the device
-        var iot = new AWS.Iot({apiVersion: '2015-05-28', region: 'us-west-2'});
+        var iot = new config.AWS.Iot({apiVersion: '2015-05-28', region: 'us-west-2'});
         var iot_endpoint = null;
 
         iot.describeEndpoint({}, function(err,data){
