@@ -76,6 +76,7 @@ exports.create_device = function(request, result, next){
   
 
   logger.log('Attempting to create device with deviceName='+device_name +' and serial='+serial_number);
+  console.log('Attempting to create device with deviceName='+device_name +' and serial='+serial_number);
   
   
   if(!device_name || !serial_number){
