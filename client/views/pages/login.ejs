@@ -1,4 +1,21 @@
-<div class="jumbotron text-center">
-  <h1>SignIn TurtleSense</h1>
-  <p>{{ tagline }}</p>
+<div class="page-header">
+  <h1>TurtleSense</h1>
+  <!-- <p>{{ tagline }}</p> -->
+</div>
+
+<div class="row">
+  <div class="col-md-6 center-block vertical-center" id ="login-form">
+    <form no-validate class="css-form">
+      <!-- username -->
+      <div class="form-group">
+        <input type="text" class="form-control" id="loginUsername" placeholder="Username" ng-model="user.username" required/>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <input type="password" class="form-control" id="loginPassword" placeholder="Password" ng-model="user.password" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg" ng-click="login(user)">Login</button>
+    </form>
+  </div>
 </div>

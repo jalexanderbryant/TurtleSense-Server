@@ -1,3 +1,33 @@
 body {
-  background: yellow;
+  background: #ecebec;
 }
+
+#login-form {
+    background: #d8d8d8;
+    min-height: 100px;
+    padding: 50px 20px;
+    border: 1px solid #979797;
+    border-radius: 5px
+}
+
+/* General */
+.center-block {
+    display:block;
+    margin-right: auto;
+    margin-left: auto;
+    float: none;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.page-header{
+    text-align: center;
+}
+
+
+
+/*** Angular Forms ***/
