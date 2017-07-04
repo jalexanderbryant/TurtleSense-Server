@@ -22,6 +22,8 @@ const auth = require('./auth/routes');
 // Path
 const path = require('path');
 
+const AWS = require('aws-sdk');
+
 
 // Setup database
 require('mongoose').connect(config.db.url);
@@ -54,6 +56,8 @@ app.use(function(err, req, res, next) {
   logger.error(err.stack);
   res.status(500).send('Oops');
 });
+
+// var aws_config = new AWS.Config({region: 'us-west-2'});
 
 // export the app instance so it can be passed to other modules
 module.exports = app

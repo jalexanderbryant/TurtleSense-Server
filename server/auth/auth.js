@@ -40,14 +40,17 @@ exports.getFreshUser = function() {
     // since the client got the JWT, or
     // it was a JWT from some other source
 
-    console.log('getFreshUser req.body ' + JSON.stringify(request.user, null,4 ))
+    console.log('getFreshUser req.user ' + JSON.stringify(request.user, null,4 ))
 
     // update req.user with fresh user from the
     // stale token data
     User.findById(request.user._id)
       .then(function(user){
         if(!user){
-          console.log('getFreshUser unauthorized')
+
+          console.log('getFreshUser user not found..... ' + user);
+          console.log('getFreshUser unauthorized');
+          
           result.status(401).send('Unauthorized');
         } else {
           request.user = user;

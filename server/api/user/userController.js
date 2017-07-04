@@ -125,12 +125,6 @@ exports.completeRegistration = function(request, result){
     console.log('debug345 ' + JSON.stringify(config.secrets, null, 4));
     console.log('debug345 ' + config.secrets.jwt);
     jwt.verify(request.params.authToken, config.secrets.jwt, function(error, decodedToken){
-
-
-
-        console.log('debug456 token='+ JSON.stringify(decodedToken, null, 4) );
-        console.log('debug567 token_from_body='+request.body.token );
-        console.log('debug789 body='+ JSON.stringify(request.query, null, 4));
         
         if(error){
 
@@ -176,3 +170,27 @@ exports.completeRegistration = function(request, result){
         }
     })
 };
+
+exports.add_device_to_user = function(request, result){
+  device_id = request.body.deviceId;
+  user = request.user
+  logger.log("addDeviceToUser new device id: " + device_id);
+  logger.log('addDeviceToUser user: ' + JSON.stringify(user, null, 4));
+
+  // Ensure device is not already associated with the user
+  var device_present = user.devices.some(function(device){return (device == device_id); });
+  if( device_present )
+  {
+
+    result.send({message: "Device already associated with user"});
+  } else {
+    user.devices.push( device_id )
+    user.save(function(error, saved_user){
+      if(error){
+        next(error);
+      } else {
+        result.json(saved_user)
+      }
+    });
+  }
+}

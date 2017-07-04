@@ -1,9 +1,19 @@
+const aws_module = require('aws-sdk');
 /*
 * DESC: Primary configuration entry point for TurtleSense
 */
 
 // Require lodash module
 var _ = require('lodash');
+
+var aws_creds = new aws_module.Credentials({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'AKIAIPZICFHYXCTXE4IQ',
+  secretAccessKey: process.env.AWS_SECRET_KEY || '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',
+  sessionToken: null
+});
+
+aws_module.config.credentials = aws_creds
+
 
 // Setup a config object
 var config = {
@@ -24,7 +34,11 @@ var config = {
   server: {
     host: process.env.TS_URL || 'localhost',
     port: process.env.PORT || 3000,
-  }
+  },
+  aws_region: 'us-west-2',
+  aws_access_key_id: process.env.AWS_ACCESS_KEY_ID || 'AKIAIPZICFHYXCTXE4IQ',
+  aws_secret_key: process.env.AWS_SECRET_KEY || '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',
+  AWS: aws_module
 };
 
 // Set NODE_ENV environment variable
