@@ -73,7 +73,7 @@ var createDevices = function(data) {
 
 var createUsers = function(data) {
   var newUsers = users.map(function(user) {
-    for( var i = 0; i < 3; i++){
+    for( var i = 0; i < 1; i++){
       var tmp = data.devices[Math.floor(Math.random()*devices.length)]._id;
       user.devices.push(tmp)
     }

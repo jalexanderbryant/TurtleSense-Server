@@ -148,6 +148,9 @@ exports.create_device = function(request, result, next){
  
             // Device now exists on AWS. Need to save it to the TurtleSense database
             var new_device = new Device(request.body);
+            new_device.deviceARN = device_data.thingArn
+
+
             new_device.save(function(save_error, saved_device){
               
               if(save_error){

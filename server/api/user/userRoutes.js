@@ -10,6 +10,7 @@ console.log('inside server/api/user/userRoutes.js');
 // Create generic routes for user
 // require('../../util/createGenericRoutes')(userController, router);
 router.param('id', userController.params);
+
 router.get('/me', checkUserAuthentication, userController.me);
 
 router.route('/')
@@ -22,6 +23,8 @@ router.route('/:id')
   .delete(userController.delete);
 
 router.get('/verifyEmail/:authToken', userController.completeRegistration);
+
+router.put('/:id/adddevicetouser', userController.add_device_to_user);
 
 // Setup a test route
 // The root of users can be found at localhost:3000/api/users
