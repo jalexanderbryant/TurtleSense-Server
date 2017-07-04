@@ -59,5 +59,7 @@ app.use(function(err, req, res, next) {
 
 // var aws_config = new AWS.Config({region: 'us-west-2'});
 
+
+
 // export the app instance so it can be passed to other modules
 module.exports = app
