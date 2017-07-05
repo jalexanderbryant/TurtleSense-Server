@@ -24,6 +24,7 @@ const path = require('path');
 
 const AWS = require('aws-sdk');
 
+const jwt = require('jsonwebtoken');
 
 // Setup database
 require('mongoose').connect(config.db.url);
@@ -42,7 +43,8 @@ require('./middleware/appMiddleware')(app);
 
 // setup the api
 app.use('/api/', api);
-app.use('/auth', auth);
+app.use('/auth/', auth);
+app.set('tokenSecret', config.secrets.jwt);
 console.log('debug123: ' + __dirname);
 console.log('inside server/server.js');
 
