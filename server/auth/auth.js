@@ -3,6 +3,7 @@ var expressJwt = require('express-jwt');
 var config = require('../config/config');
 var checkToken = expressJwt({ secret: 'gumball' });
 var User = require('../api/user/userModel');
+var logger = require('../util/logger');
 
 exports.decodeToken = function() {
   return function(request, result, next) {
@@ -122,4 +123,33 @@ exports.signToken = function(tokenData) {
     config.secrets.jwt,
     {expiresIn: config.expireTime}
   );
+};
+
+/* New Authentication middleware */
+exports.verifyToken = function(){
+  return function(request, result, next){
+    // Find the token
+    var token = request.body.token || request.query.token || request.headers['x-access-token'];
+
+    // Attempt to decode it
+    if(token){
+
+      jwt.verify(token, request.app.get('tokenSecret'), function(error, decodedToken){
+        if(error){
+          logger.error(error);
+          return result.json({success: false, message: 'Failed to Authenticate. Invalid Token.'});
+        } else {
+          // save request for other routes
+          request.decodedToken = decodedToken;
+          next();
+        }
+      });
+    } else {
+      // No token found
+      return result.status(403).send({
+        success: false,
+        message: "Authentication failed. No token."
+      });
+    }
+  };
 };
