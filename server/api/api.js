@@ -5,6 +5,7 @@ console.log('inside server/api/api.js');
 // for all of our resources (users, hubs, etc)
 router.use('/users', require('./user/userRoutes'));
 router.use('/devices', require('./device/deviceRoutes'));
+router.use('/data', require('./data/dataRoutes'));
 // router.use('/devices', require('./device/deviceRoutes'));
 
 module.exports = router;

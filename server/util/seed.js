@@ -1,5 +1,6 @@
 var User = require('../api/user/userModel');
-var Device = require('../api/device/deviceModel')
+var Device = require('../api/device/deviceModel');
+var Data = require('../api/data/dataModel');
 var _ = require('lodash');
 var logger = require('./logger');
 logger.log('Seeding the Database');
@@ -52,7 +53,7 @@ var createDoc = function(model, doc) {
 
 var cleanDB = function() {
   logger.log('... cleaning the DB');
-  var cleanPromises = [User,Device]
+  var cleanPromises = [User,Device, Data]
     .map(function(model) {
       return model.remove().exec();
     });
