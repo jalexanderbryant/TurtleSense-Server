@@ -23,15 +23,15 @@ var data_schema = new schema({
       default: null
     },
 
-    humidity: {
+    moisture: {
       type: Number,
       default: null
     },
 
     motion: {
-      x: { type: Number },
-      y: { type: Number },
-      z: { type: Number }
+      x_acc: { type: Number },
+      y_acc: { type: Number },
+      z_acc: { type: Number }
     },
 
 });

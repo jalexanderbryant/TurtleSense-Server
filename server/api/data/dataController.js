@@ -32,12 +32,7 @@ exports.upload = function(request, result, next)
       input: fs.createReadStream(request.file.path)
     });
     logger.log('dataController upload lines')
-    file_interface.on('line', function(line){
-      // logger.log( line );
-
-      // Process each line: 
-      // FZEDA623D01XT0501, 2017-07-09T16:04:00, 89.984, 26.20, 6.0, 7.0, 9.81
-      
+    file_interface.on('line', function(line){    
       values = line.split(',')
       
       // Serial number
@@ -53,24 +48,20 @@ exports.upload = function(request, result, next)
       temp_string = values[2].trim();
       nugget.temperature = parseFloat( temp_string );
 
-      // humidity
-      humidity_string = values[3].trim();
-      nugget.humidity = parseFloat( humidity_string );
+      // moisture
+      moisture_string = values[3].trim();
+      nugget.moisture = parseFloat( moisture_string );
 
       // Motion
       motion_x = values[4].trim();
-      nugget.motion.x = parseFloat(motion_x);
+      nugget.motion.x_acc = parseFloat(motion_x);
 
       motion_y = values[5].trim();
-      nugget.motion.y = parseFloat(motion_y);
+      nugget.motion.y_acc = parseFloat(motion_y);
 
       motion_z = values[6].trim();
-      nugget.motion.z = parseFloat(motion_z);
+      nugget.motion.z_acc = parseFloat(motion_z);
 
-      // logger.log('serial: ' +nugget.deviceSerial);
-      // logger.log('date: ' + nugget.dateAndTime);
-      // logger.log('key:' + nugget.key)
-      // logger.log('nugget :' + JSON.stringify(nugget, null, 4))
 
       // Write to DB
       var new_data_nugget = new Data(nugget);
@@ -83,17 +74,40 @@ exports.upload = function(request, result, next)
           return next(error);
         }
       });
-
-
     });
-    // logger.log("dataController request =" + JSON.stringify(request.body,null,4));
-    // logger.log("dataController request.file =" + request.body.file);
-    
-    // if(request.body.file == null){
-    //   logger.log("dataController action=upload error=no file uploaded")
-    //   return result.json({success:false, message: "Data upload failed. A file with contents is required"});
-    // }
 
-    return result.json({serial: request.params.serial})
+    return result.json({success: true, message: 'Uploaded'})
+}
 
+exports.getTemp = function(request, result, next)
+{
+  Data.find({})
+    .select('temperature dateAndTime -_id')
+    .then(function(all_data){
+      result.json(all_data);
+    }, function(error){
+      next(err);
+    });
+}
+
+exports.getMoisture = function(request, result, next)
+{
+  Data.find({})
+    .select('moisture dateAndTime -_id')
+    .then(function(all_data){
+      result.json(all_data);
+    }, function(error){
+      next(err);
+    });
+}
+
+exports.getMotion = function(request, result, next)
+{
+  Data.find({})
+    .select('motion dateAndTime -_id')
+    .then(function(all_data){
+      result.json(all_data);
+    }, function(error){
+      next(err);
+    });
 }

@@ -17,8 +17,11 @@ var upload = multer({storage: storage})
 
 
 // Test 
-router.route('/')
-  .get(dataController.get);
+router.route('/').get(dataController.get);
+
+router.route('/temperature').get(dataController.getTemp);
+router.route('/moisture').get(dataController.getMoisture);
+router.route('/motion').get(dataController.getMotion);
 
 router.post('/:serial/upload', upload.single('data'), dataController.upload);
 
