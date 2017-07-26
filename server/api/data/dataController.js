@@ -50,7 +50,7 @@ exports.upload = function(request, result, next)
 
       // moisture
       // moisture_string = values[3].trim();
-      // nugget.moisture = parseFloat( moisture_string );
+      nugget.moisture = 22.23; //parseFloat( moisture_string );
 
       // Motion
       motion_x = values[3].trim();
