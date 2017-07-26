@@ -49,17 +49,17 @@ exports.upload = function(request, result, next)
       nugget.temperature = parseFloat( temp_string );
 
       // moisture
-      moisture_string = values[3].trim();
-      nugget.moisture = parseFloat( moisture_string );
+      // moisture_string = values[3].trim();
+      // nugget.moisture = parseFloat( moisture_string );
 
       // Motion
-      motion_x = values[4].trim();
+      motion_x = values[3].trim();
       nugget.motion.x_acc = parseFloat(motion_x);
 
-      motion_y = values[5].trim();
+      motion_y = values[4].trim();
       nugget.motion.y_acc = parseFloat(motion_y);
 
-      motion_z = values[6].trim();
+      motion_z = values[5].trim();
       nugget.motion.z_acc = parseFloat(motion_z);
 
 
