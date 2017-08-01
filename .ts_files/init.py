@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import requests
 import os
-import paho.mqtt.client as paho
+# import paho.mqtt.client as paho
 import socket
 import ssl
 import json
@@ -25,7 +25,7 @@ def initialize_device():
     # Get device name from user and clean it up
     global device_name
     global client_id
-    device_name = input('Enter a device name (no_spaces allowed): ')
+    device_name = raw_input('Enter a device name (no_spaces allowed): ')
     device_name = device_name.strip().replace(' ', '_')
     client_id = device_name
 
@@ -39,13 +39,13 @@ def initialize_device():
         serial_number = serial_number.strip()
 
     # Log
-    print(f"Attempting to create device instance on server with device name '{device_name}' and serial number '{serial_number}'")
+    print "Attempting to create device instance on server with device name: %s and serial number %s" % (device_name, serial_number)
 
     # Send request to server to create the device
     payload = { 'deviceName': device_name, 
             'serialNumber': serial_number }
 
-    print("Issuing request...")
+    print "Issuing request..."
 
     response = requests.post(api_endpoint, data=payload).json()
 
@@ -70,18 +70,18 @@ def initialize_device():
         f.write(device_name+"\n")
         f.write(serial_number+"\n")
 
-def on_connect(client, data, flags, rc):
-#    if rc==0:
-#       payload= "{\"state\":{\"reported\":{\"status\":\"active\"}}}"
-#        mqtt_client.subscribe('$aws/things/' + device_name + 'shadow/update/delta', qos=0)
-#        mqtt_client.publish('$aws/things/' + device_name + '/shadow/update',payload,0,True)
-    global conn_flag
-    conn_flag = True
-    print("Connection returned result: " + str(rc))
+# def on_connect(client, data, flags, rc):
+# #    if rc==0:
+# #       payload= "{\"state\":{\"reported\":{\"status\":\"active\"}}}"
+# #        mqtt_client.subscribe('$aws/things/' + device_name + 'shadow/update/delta', qos=0)
+# #        mqtt_client.publish('$aws/things/' + device_name + '/shadow/update',payload,0,True)
+#     global conn_flag
+#     conn_flag = True
+#     print("Connection returned result: " + str(rc))
 
-def on_message(client, data, msg):
-#    print("Message received: " +msg.topic+" | QoS: " +str(msg.qos)+" | Data Received: " +str(msg.payload))
-    print(msg.topic+" "+str(msg.payload))
+# def on_message(client, data, msg):
+# #    print("Message received: " +msg.topic+" | QoS: " +str(msg.qos)+" | Data Received: " +str(msg.payload))
+#     print(msg.topic+" "+str(msg.payload))
 
 # Check to see if the system is already initialized
 # If device.txt exists, means this is not the first time
@@ -91,37 +91,35 @@ if os.path.exists('device.txt'):
     with open('device.txt', 'r') as f:
         device_name = f.readline().strip()
         serial_number = f.readline().strip()
-        print(f"Starting messaging for {device_name}, {serial_number}")
+        print"Starting messaging for %s, %s" % (device_name, serial_number)
 else:
     initialize_device()
 
 
-mqtt_client = paho.Client()
-mqtt_client.on_connect = on_connect
-mqtt_client.on_message = on_message
+# mqtt_client = paho.Client()
+# mqtt_client.on_connect = on_connect
+# mqtt_client.on_message = on_message
 
-mqtt_client.tls_set(ca_path, certfile=cert_path, keyfile=key_path, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
+# mqtt_client.tls_set(ca_path, certfile=cert_path, keyfile=key_path, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
 
-mqtt_client.connect(aws_iot_endpoint, aws_port, keepalive=60)
+# mqtt_client.connect(aws_iot_endpoint, aws_port, keepalive=60)
 
-mqtt_client.loop_start()
-a = 0
-while 1 == 1:
-    sleep(3.0)
-    if conn_flag == True:
-#        payload = f"{\"state\":{\"reported\":{\"status\":\"{message}\"}}}"
-        payload = { "state": {
-            "reported": {
-                "status": f"count = {a}" 
-                }
-            }
-        }
-        payload = json.dumps(payload)
-        print('debug ' + device_name)
-        mqtt_client.publish('$aws/things/' + device_name + '/shadow/update',payload,0,True)
-#        mqtt_client.publish("Count: " + "a", qos=1)
-        print(f"msg sent: count = {payload}")
-        a = a +1
-    else:
-        print("waiting for connection...")
+# mqtt_client.loop_start()
+# a = 0
+# while 1 == 1:
+#     sleep(3.0)
+#     if conn_flag == True:
+#         payload = { "state": {
+#             "reported": {
+#                 "status": f"count = {a}" 
+#                 }
+#             }
+#         }
+#         payload = json.dumps(payload)
+#         print('debug ' + device_name)
+#         mqtt_client.publish('$aws/things/' + device_name + '/shadow/update',payload,0,True)
+#         print "msg sent: count = %s" payload
+#         a = a +1
+#     else:
+#         print("waiting for connection...")
 
